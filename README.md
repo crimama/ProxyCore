@@ -1,4 +1,4 @@
-# ProxyCore : Noise-resistant Industrial Anomaly Detection with proxy based Metric Learning
+# ProxyCore : Noise-resistant Industrial Anomaly Detection with proxy based Metric Learning
 - Anomaly Detection Framework for Noisy unsupervised learning 
 - Now ongoing 
 

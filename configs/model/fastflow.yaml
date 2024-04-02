@@ -25,7 +25,7 @@ TRAIN:
   epochs: 500
   grad_accum_steps: 1
   mixed_precision: 'no'
-  log_interval: 10
+  log_interval: 1
   wandb:
     use: false
     project_name: UARDF

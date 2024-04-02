@@ -48,12 +48,13 @@ class AverageMeter:
                           
 def metric_logging(savedir, use_wandb,
                      epoch, step,epoch_time_m,
-                    optimizer, train_metrics, test_metrics):
+                    optimizer,test_metrics,train_metrics=None):
     
     metrics = OrderedDict()
     metrics.update([('epoch', epoch)])
     metrics.update([('lr',round(optimizer.param_groups[0]['lr'],5))])
-    metrics.update([('train_' + k, round(v,4)) for k, v in train_metrics.items()])
+    if train_metrics is not None:
+        metrics.update([('train_' + k, round(v,4)) for k, v in train_metrics.items()])
     metrics.update([
                     # ('test_' + k, round(v,4)) for k, v in test_metrics.items()
                     ('test_metrics',test_metrics)

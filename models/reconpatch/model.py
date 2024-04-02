@@ -125,7 +125,9 @@ class FeatureDataset(torch.utils.data.Dataset):
         return len(self.features)
         
     def __getitem__(self, idx):
-        return self.features[idx]        
+        x = self.features[idx]
+        y = idx - (784 * (idx//784))
+        return x,y 
     
 def l2_distance(z):
     diff = torch.unsqueeze(z,dim=1) - torch.unsqueeze(z,dim=0)

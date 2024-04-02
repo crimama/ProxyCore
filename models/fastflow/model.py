@@ -10,7 +10,7 @@ from timm.models.cait import Cait
 class FastFlow(FastflowModel):
     def __init__(
         self,
-        input_size: (int, int),
+        input_size,
         backbone: str,
         pre_trained: bool = True,
         flow_steps: int = 8,

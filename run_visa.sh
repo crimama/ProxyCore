@@ -12,9 +12,9 @@ elif [ $gpu_id == '1' ]; then
   class_name='macaroni2  pcb1  pcb2  pcb3  pcb4  pipe_fryum'
   anomaly_ratio='0.0'
 elif [ $gpu_id == '99' ]; then
-  class_name='pcb1'
+  class_name='juice_bottle'
   anomaly_ratio='0.0'
-  gpu_id='1'
+  gpu_id='0'
 else
   echo "Invalid GPU ID. Please provide a valid GPU ID (0 or 1)."
 fi
@@ -26,10 +26,10 @@ do
   do
     echo "sampling_method: $s class_name: $c anomaly_ratio: $r"      
     CUDA_VISIBLE_DEVICES=$gpu_id python main.py \
-    default_setting=./configs/default/visa.yaml \
+    default_setting=./configs/default/mvtecloco.yaml \
     model_setting=./configs/model/proxy.yaml \
     DATASET.class_name=$c \
     DATASET.params.anomaly_ratio=$r \
-    DEFAULT.exp_name=test
+    DEFAULT.exp_name=test_loco
     done
 done

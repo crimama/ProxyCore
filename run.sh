@@ -11,7 +11,7 @@ elif [ $gpu_id == '1' ]; then
   class_name='pill screw tile toothbrush wood zipper metal_nut capsule cable bottle carpet grid leather'
   anomaly_ratio='0.0 0.1 0.2'
 elif [ $gpu_id == '99' ]; then
-  class_name='pcb1'
+  class_name='pill'
   anomaly_ratio='0.0'
   gpu_id='1'
 else
@@ -25,10 +25,10 @@ do
   do
     echo "sampling_method: $s class_name: $c anomaly_ratio: $r"      
     CUDA_VISIBLE_DEVICES=$gpu_id python main.py \
-    default_setting=./configs/default/visa.yaml \
-    model_setting=./configs/model/proxy.yaml \
+    default_setting=./configs/default/mvtecad.yaml \
+    model_setting=./configs/model/reconpatch.yaml \
     DATASET.class_name=$c \
     DATASET.params.anomaly_ratio=$r \
-    DEFAULT.exp_name=proxy_nsoftmax_scheduler
+    DEFAULT.exp_name=test
     done
 done

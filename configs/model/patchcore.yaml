@@ -9,7 +9,7 @@ MODEL:
     faiss_on_gpu: True
     faiss_num_workers: 4
     weight_method: lof # identity lof nearest gaussian
-    threshold: yen
+    threshold: quant_0.1
     sampling_ratio: 0.1
 
 DATASET:

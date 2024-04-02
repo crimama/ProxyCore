@@ -21,10 +21,10 @@ OPTIMIZER:
   lr: 1e-5
   params:
     weight_decay: 1e-2    
+
 SCHEDULER: 
-  name: CosineAnnealingLR
-  params: 
-    T_max: 200
+  name: None
+  params: None
 
 DATASET:
   aug_info: 

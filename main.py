@@ -109,7 +109,7 @@ def run(cfg):
         )
                 
         
-    __import__(f"train_{cfg.MODEL.method.lower()}").fit(
+    __import__(f'train.train_{cfg.MODEL.method.lower()}', fromlist=f'train_{cfg.MODEL.method.lower()}').fit(
             model        = model, 
             trainloader  = trainloader, 
             testloader   = testloader, 
