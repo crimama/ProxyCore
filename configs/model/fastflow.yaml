@@ -1,0 +1,50 @@
+DEFAULT:
+  seed: 42
+  savedir: ./results
+  exp_name: ''
+
+DATASET:
+  datadir: ../Data
+  batch_size: 16
+  test_batch_size: 64
+  num_workers: 8
+  dataset_name: MVTecAD  # [AnomalyDataset,MVTecAD]
+  aug_info: 
+    - Resize
+  anomaly_ratio: 0
+  class_name: hazelnut
+  img_size: 256
+
+OPTIMIZER:
+  opt_name: Adam
+  lr: 1e-3
+  params:
+    weight_decay: 1e-5
+
+TRAIN:
+  epochs: 500
+  grad_accum_steps: 1
+  mixed_precision: 'no'
+  log_interval: 10
+  wandb:
+    use: false
+    project_name: UARDF
+    
+SCHEDULER: 
+  name: CosineAnnealingWarmRestarts
+  params:
+    T_0: 500
+    T_mult: 1
+    eta_min: 0.00001
+
+MODEL:
+  method: FastFlow
+  backbone: resnet18
+  params:
+    input_size: 
+      - 256
+      - 256
+    flow_steps: 8
+
+REFINEMENT:
+  nb_round: 0

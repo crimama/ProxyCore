@@ -1,0 +1,37 @@
+MODEL:
+  method: CoTeaching
+  backbone: wide_resnet50_2
+  params:
+    input_shape:
+      - 3 
+      - 224
+      - 224
+    layers_to_extract_from: 
+      - layer2
+      - layer3
+    faiss_on_gpu: True
+    faiss_num_workers: 4
+    weight_method: identity # identity lof nearest gaussian
+    threshold: quant15
+    lof_k: 6
+    with_soft_weight: False
+    sampler_name: approx_greedy_coreset
+    sampling_ratio: 0.1
+    anomaly_score_num_nn: 5 # n_nearest_neighbours
+    n_input_feat: 1024
+    n_hidden_feat: 4096
+    n_projection_feat: 1024
+
+
+OPTIMIZER:
+  opt_name: AdamP
+  lr: 1e-5
+  params:
+    weight_decay: 1e-2    
+
+DATASET:
+  aug_info: 
+    - PatchCore
+
+TRAIN:
+  epochs: 200

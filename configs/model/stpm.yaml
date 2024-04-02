@@ -1,0 +1,44 @@
+DEFAULT:
+  seed: 0
+  savedir: ./results
+  exp_name: anomalib
+
+DATASET:
+  datadir: ../Data
+  batch_size: 32
+  test_batch_size: 128
+  num_workers: 8
+  dataset_name: MVTecAD  # [AnomalyDataset,MVTecAD]
+  aug_info: null
+  anomaly_ratio: 0
+  class_name: bottle  
+  img_size: 256
+
+OPTIMIZER:
+  opt_name: SGD
+  lr: 0.4
+
+SCHEDULER: 
+  name: False
+  params:
+
+TRAIN:
+  epochs: 100
+  grad_accum_steps: 1
+  mixed_precision: 'no'
+  log_interval: 2
+  wandb:
+    use: false
+    project_name: UAADF
+
+MODEL:
+  method: STPM 
+  model_name: resnet18
+  params:
+    layers: ['layer2','layer3','layer4']
+    input_size:
+      - 256
+      - 256 
+
+REFINEMENT:
+  nb_round: 0
