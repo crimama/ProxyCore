@@ -29,4 +29,10 @@ DATASET:
     - PatchCore
 
 TRAIN:
-  epochs: 40
+  epochs: 120
+
+SCHEDULER: 
+  name: CosineAnnealingLR
+  params:
+    T_max : 120
+    

@@ -8,14 +8,14 @@ DATASET:
   batch_size: 32
   test_batch_size: 32
   num_workers: 8
-  dataset_name: VISA  # [AnomalyDataset,MVTecAD]
+  dataset_name: MVTecLoco  # [AnomalyDataset,MVTecAD]
   aug_info: 
     - Resize
-  class_name: pcb1
+  class_name: juice_bottle
   img_size: 224
   params:
-    anomaly_ratio: 0.0
-    baseline: True
+    anomaly_ratio: 0.2
+    baseline: false
 
 OPTIMIZER:
   opt_name: Adam
@@ -37,4 +37,4 @@ TRAIN:
 SCHEDULER: 
   name: null
   params: null
-    
+  

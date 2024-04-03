@@ -8,8 +8,8 @@ MODEL:
       - 224
     faiss_on_gpu: True
     faiss_num_workers: 4
-    weight_method: lof # identity lof nearest gaussian
-    threshold: quant_0.1
+    weight_method: identity # identity lof nearest gaussian
+    threshold: quant_1
     sampling_ratio: 0.1
 
 DATASET:

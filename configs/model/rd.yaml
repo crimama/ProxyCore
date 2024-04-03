@@ -1,22 +1,3 @@
-DEFAULT:
-  seed: 42
-  savedir: ./results
-  exp_name: 'refinement_fix_allnorm_1121'
-
-DATASET:
-  datadir: ../Data
-  batch_size: 32
-  test_batch_size: 32
-  num_workers: 8
-  dataset_name: MVTecAD  # [AnomalyDataset,MVTecAD]
-  aug_info: 
-    - Resize
-  class_name: screw
-  img_size: 224
-  params:
-    anomaly_ratio: 0.2
-    baseline: false
-
 OPTIMIZER:
   opt_name: Adam
   lr: 0.005
@@ -26,17 +7,7 @@ OPTIMIZER:
     - 0.999
 
 TRAIN:
-  epochs: 50
-  grad_accum_steps: 1
-  mixed_precision: 'no'
-  log_interval: 1
-  wandb:
-    use: false
-    project_name: UARDF
-    
-SCHEDULER: 
-  name: null
-  params: null
+  epochs: 200
     
 
 MODEL:
@@ -51,7 +22,3 @@ MODEL:
       - layer2
       - layer3
     anomaly_map_mode: add
-
-REFINEMENT:
-  nb_round: 10
-  n_query: 1

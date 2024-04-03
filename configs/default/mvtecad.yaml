@@ -28,8 +28,8 @@ OPTIMIZER:
 TRAIN:
   epochs: 1
   grad_accum_steps: 1
-  mixed_precision: 'no'
-  log_interval: 10
+  mixed_precision: 'fp16'
+  log_interval: 1
   wandb:
     use: false
     project_name: ProxyCore
@@ -38,10 +38,3 @@ SCHEDULER:
   name: null
   params: null
     
-
-REFINEMENT:
-  nb_round: 1
-  n_query: 0
-
-
-  
