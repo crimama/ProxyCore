@@ -14,7 +14,8 @@ pip install timm==0.6.5
 pip install pytorch==1.9.5
 pip install kornia==0.6.9
 pip install imgaug==0.4.0
-pip install FrEIA==  0.2
+pip install FrEIA==0.2
+pip install faiss-gpu
 pip install av==10.0.0
 pip install adamp
 pip install albumentations==1.3.1
