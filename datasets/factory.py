@@ -64,7 +64,7 @@ def load_MVTecLoco(dataset_name:str, datadir:str, class_name:str, img_size:int, 
     trainset = MVTecLoco(
                 df           = df,
                 train_mode   = 'train',
-                transform    = train_augmentation(img_size = img_size, mean = mean, std = std, aug_info = aug_info),
+                transform    = train_augmentation(img_size = img_size, mean = mean, std = std, aug_info = ['Resize']),
                 gt_transform = gt_augmentation(img_size = img_size, aug_info = aug_info),
                 gt           = True 
             )
@@ -72,7 +72,7 @@ def load_MVTecLoco(dataset_name:str, datadir:str, class_name:str, img_size:int, 
     testset = MVTecLoco(
                 df           = df,
                 train_mode   = 'test',
-                transform    = test_augmentation(img_size = img_size, mean = mean, std = std, aug_info = aug_info),
+                transform    = test_augmentation(img_size = img_size, mean = mean, std = std, aug_info = ['Resize']),
                 gt_transform = gt_augmentation(img_size = img_size, aug_info = aug_info),
                 gt           = True 
             )
