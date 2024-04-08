@@ -77,7 +77,7 @@ def parser(jupyter:bool = False, default_setting:str = None, model_setting:str =
         cfg = cli_parser()
     
     # Update experiment name
-    if cfg.MODEL.method == 'PatchCore':
+    if cfg.MODEL.method in ['PatchCore','SoftPatch']:
         # cfg.DEFAULT.exp_name = f"{cfg.DEFAULT.exp_name}-coreset_ratio_{cfg.MODEL.params.coreset_sampling_ratio}-anomaly_ratio_{cfg.DATASET.params.anomaly_ratio}" 
         cfg.DEFAULT.exp_name = f"{cfg.DEFAULT.exp_name}-{cfg.MODEL.params.weight_method}-sampling_ratio_{cfg.MODEL.params.sampling_ratio}-anomaly_ratio_{cfg.DATASET.params.anomaly_ratio}" 
     else:
@@ -91,7 +91,7 @@ def parser(jupyter:bool = False, default_setting:str = None, model_setting:str =
     
     # update config for each method 
     
-    if cfg.MODEL.method in ['PatchCore','ReconPatch','ProxyCoreBase']:
+    if cfg.MODEL.method in ['PatchCore','ReconPatch','ProxyCoreBase','SoftPatch']:
         cfg = patchcore_arguments(cfg)
     else:
         pass
