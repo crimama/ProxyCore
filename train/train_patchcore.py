@@ -53,8 +53,8 @@ def test(model, dataloader) -> dict:
     from utils.metrics import MetricCalculator, loco_auroc
     
     model.eval()
-    img_level = MetricCalculator(metric_list = ['auroc','average_precision','confusion_matrix'])
-    pix_level = MetricCalculator(metric_list = ['auroc','average_precision','confusion_matrix','aupro'])
+    img_level = MetricCalculator(metric_list = ['auroc','average_precision'])
+    pix_level = MetricCalculator(metric_list = ['auroc','average_precision'])
         
     for idx, (images, labels, gts) in enumerate(dataloader):
         
