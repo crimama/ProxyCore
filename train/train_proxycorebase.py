@@ -9,7 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F 
 from collections import OrderedDict
 
-from utils.metrics import MetricCalculator
+from utils.metrics import MetricCalculator, loco_auroc
 from utils.log import AverageMeter,metric_logging
 
 
@@ -122,6 +122,17 @@ def test(model, featureloader, testloader, device) -> dict:
     # Calculate results of evaluation     
     p_results = pix_level.compute()
     i_results = img_level.compute()
+                    
+        # Calculate results of evaluation per each images        
+    if testloader.dataset.__class__.__name__ == 'MVTecLoco':
+        p_results['loco_auroc'] = loco_auroc(pix_level,testloader)
+        i_results['loco_auroc'] = loco_auroc(img_level,testloader)                
+            
+    # logging metrics
+    if testloader.dataset.name != 'CIFAR10':
+        _logger.info('Image AUROC: %.3f%%| Pixel AUROC: %.3f%%' % (i_results['auroc'],p_results['auroc']))
+    else:
+        _logger.info('Image AUROC: %.3f%%' % (i_results['auroc']))
                     
     # Logging                     
     _logger.info('Image AUROC: %.3f, Pixel AUROC: %.3f' % (i_results['auroc'], p_results['auroc']))        
