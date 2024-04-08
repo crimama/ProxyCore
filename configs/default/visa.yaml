@@ -15,7 +15,7 @@ DATASET:
   img_size: 224
   params:
     anomaly_ratio: 0.0
-    baseline: True
+    baseline: false
 
 OPTIMIZER:
   opt_name: Adam
