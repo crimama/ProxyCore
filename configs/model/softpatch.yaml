@@ -1,0 +1,17 @@
+MODEL:
+  method: SoftPatch
+  backbone: wide_resnet50_2
+  params:
+    input_shape:
+      - 3 
+      - 224
+      - 224
+    faiss_on_gpu: True
+    faiss_num_workers: 4
+    weight_method: lof # identity lof nearest gaussian
+    threshold: yen
+    sampling_ratio: 0.1
+
+DATASET:
+  aug_info: 
+    - PatchCore
