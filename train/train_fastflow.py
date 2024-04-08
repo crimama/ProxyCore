@@ -13,12 +13,7 @@ from utils.metrics import MetricCalculator
 from utils.log import AverageMeter,metric_logging
 
 _logger = logging.getLogger('train')
-
-
-             
-
-    
-
+            
 
 def train(model, dataloader, optimizer, accelerator, log_interval: int) -> dict:
     print('Train Start')
@@ -76,8 +71,8 @@ def test(model, dataloader) -> dict:
     from utils.metrics import MetricCalculator, loco_auroc
     
     model.eval()
-    img_level = MetricCalculator(metric_list = ['auroc','average_precision','confusion_matrix'])
-    pix_level = MetricCalculator(metric_list = ['auroc','average_precision','confusion_matrix','aupro'])
+    img_level = MetricCalculator(metric_list = ['auroc','average_precision'])
+    pix_level = MetricCalculator(metric_list = ['auroc','average_precision'])
         
     for idx, (images, labels, gts) in enumerate(dataloader):
 
@@ -157,7 +152,7 @@ def fit(
         if best_score < test_metrics['img_level']['auroc']:
             best_score = test_metrics['img_level']['auroc']
             print(f" New best score : {best_score} | best epoch : {epoch}\n")
-            torch.save(model.state_dict(), os.path.join(savedir, f'model_best.pt')) 
+            # torch.save(model.state_dict(), os.path.join(savedir, f'model_best.pt')) 
             
     test_metrics = test(
                 model        = model, 
