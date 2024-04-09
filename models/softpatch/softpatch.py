@@ -48,7 +48,7 @@ class PatchCore(torch.nn.Module):
         backbone,
         device,
         input_shape,
-        layers_to_extract_from=("layer2", "layer2"),
+        layers_to_extract_from=("layer2", "layer3"),
         pretrain_embed_dimension=1024,
         target_embed_dimension=1024,
         patchsize=3,

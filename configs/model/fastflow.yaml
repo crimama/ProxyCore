@@ -5,7 +5,7 @@ OPTIMIZER:
     weight_decay: 1e-5
 
 TRAIN:
-  epochs: 500
+  epochs: 200
   mixed_precision: 'no'
   
 
@@ -13,7 +13,7 @@ TRAIN:
 SCHEDULER: 
   name: CosineAnnealingLR
   params:
-    T_max: 500  
+    T_max: 200  
 
 MODEL:
   method: FastFlow
@@ -23,6 +23,3 @@ MODEL:
       - 224
       - 224
     flow_steps: 8
-
-REFINEMENT:
-  nb_round: 0

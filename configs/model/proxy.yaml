@@ -29,6 +29,8 @@ SCHEDULER:
 DATASET:
   aug_info: 
     - PatchCore
+  params:
+    baseline: True
 
 TRAIN:
   epochs: 200
