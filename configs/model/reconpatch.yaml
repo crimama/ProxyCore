@@ -9,7 +9,7 @@ MODEL:
     faiss_on_gpu: True
     faiss_num_workers: 4
     weight_method: identity # identity lof nearest gaussian
-    threshold: quant15
+    threshold: quant_0.15
     sampling_ratio: 0.1
     n_input_feat: 1024
     n_hidden_feat: 4096

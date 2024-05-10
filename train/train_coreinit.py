@@ -15,7 +15,7 @@ from utils.log import AverageMeter,metric_logging
 
 _logger = logging.getLogger('train')
 
-def train(model, featureloader, optimizer, accelerator, log_interval: int) -> dict:
+def train(model, featureloader, optimizer, accelerator, log_interval: int, cfg: dict) -> dict:
     _logger.info('Train Start')
    
     batch_time_m = AverageMeter()
@@ -26,9 +26,14 @@ def train(model, featureloader, optimizer, accelerator, log_interval: int) -> di
     model.train()        
     for idx, (feat, target) in enumerate(featureloader):
         data_time_m.update(time.time() - end)
+        
+        #! augmentation 
+        if cfg.DATASET.embed_augemtation:
+            feat = feat + torch.randn(feat.shape).to(feat.device)        
+        
         # predict
         outputs = model(feat.to(accelerator.device)) # outputs = [z,w]
-        loss   = model.criterion(outputs)
+        loss   = model.criterion([outputs, target])
 
         # loss update
         optimizer.zero_grad()
@@ -98,7 +103,7 @@ def test(model, featureloader, testloader, device) -> dict:
             
             # get patch wise anomaly score using image score    
             patch_scores = model.core.patch_maker.unpatch_scores(
-                image_scores, batchsize=batchsize
+                image_scores, batchsize=batchsize 
             ) # Unfold : (B)
                         
             scales = patch_shapes[0]
@@ -145,15 +150,59 @@ def test(model, featureloader, testloader, device) -> dict:
 def fit(
     model, trainloader, testloader, optimizer, scheduler, accelerator,
     epochs: int, use_wandb: bool, log_interval: int, seed: int = None, savedir: str = None,
-    cfg=None
+    cfg = None 
     ):
 
     best_score = 0.0
     epoch_time_m = AverageMeter()
     end = time.time() 
     
+    ################## core init 
     featureloader = accelerator.prepare(model.get_feature_loader(trainloader))
+    features = [] 
+    for feat, target in featureloader:
+        features.append(feat.detach().cpu().numpy())            
+    features = np.vstack(features)
+    proxy, _ = model.core.featuresampler.run(features)
     
+    #! 가장 기본 distance matrix 계산 방법 
+    _logger.info('Start Claculate Distance Matrix')        
+    
+    if cfg.DATASET.pseudo_label == 'coreset':
+        # distmat = torch.matmul(torch.Tensor(features),torch.Tensor(proxy).T)
+        proxy_label = [] 
+        for feat,_ in featureloader:
+            proxy_label.append(torch.matmul(feat,torch.Tensor(proxy).to(feat.device).T).argmax(dim=1))
+        proxy_label = torch.concat(proxy_label)
+        
+    elif cfg.DATASET.pseudo_label == 'normalize_coreset':
+        proxy = nn.functional.normalize(torch.Tensor(proxy),dim=1)
+        #distmat = torch.matmul(torch.Tensor(features),proxy.T)
+        proxy_label = [] 
+        for feat,_ in featureloader:
+            proxy_label.append(torch.matmul(feat,proxy.T.to(feat.device)).argmax(dim=1))
+        proxy_label = torch.concat(proxy_label)
+    else:
+        raise NotImplementedError        
+    
+    
+    featureloader.dataset.labels = proxy_label
+
+    model.set_criterion(proxy)
+
+    _logger.info('Core set Done')
+        
+    from adamp import AdamP 
+    optimizer = AdamP(model.parameters(), lr=optimizer.param_groups[0]['lr'], weight_decay=optimizer.param_groups[0]['weight_decay'])
+    
+    if cfg.SCHEDULER.name is not None:
+        scheduler = __import__('torch.optim.lr_scheduler', fromlist='lr_scheduler').__dict__[cfg.SCHEDULER.name](optimizer, **cfg.SCHEDULER.params)
+    else:
+        scheduler = None    
+    
+    model, optimizer, scheduler = accelerator.prepare(model,optimizer, scheduler)
+    ################## 
+
     for step,  epoch in enumerate(range(epochs)):
         _logger.info(f'Epoch: {epoch+1}/{epochs}')
         
@@ -162,16 +211,18 @@ def fit(
             featureloader = featureloader, 
             optimizer     = optimizer, 
             accelerator   = accelerator, 
-            log_interval  = log_interval
+            log_interval  = log_interval,
+            cfg           = cfg 
         )                
         
         epoch_time_m.update(time.time() - end)
         end = time.time()
         
         if scheduler is not None:
-            scheduler.step()
+            if epoch > 4:
+                scheduler.step()
                 
-        if epoch%49 == 0:
+        if epoch%24 == 0:
             test_metrics = test(
                 model         = model, 
                 featureloader = featureloader,
@@ -183,7 +234,13 @@ def fit(
                 savedir = savedir, use_wandb = use_wandb, epoch = epoch, step = step,
                 optimizer = optimizer, epoch_time_m = epoch_time_m,
                 train_metrics = train_metrics, test_metrics = test_metrics)
-    
+            
+        # checkpoint - save best results and model weights    
+        if best_score < test_metrics['img_level']['auroc']:
+            best_score = test_metrics['img_level']['auroc']
+            _logger.info(f" New best score : {best_score} | best epoch : {epoch}\n")
+            # torch.save(model.state_dict(), os.path.join(savedir, f'model_best.pt')) 
+            
     test_metrics = test(
         model         = model, 
         featureloader = featureloader,
@@ -196,8 +253,4 @@ def fit(
         optimizer = optimizer, epoch_time_m = epoch_time_m,
         train_metrics = train_metrics, test_metrics = test_metrics)
     
-    # checkpoint - save best results and model weights        
-    if best_score < test_metrics['img_level']['auroc']:
-        best_score = test_metrics['img_level']['auroc']
-        _logger.info(f" New best score : {best_score} | best epoch : {epoch}\n")
-        # torch.save(model.state_dict(), os.path.join(savedir, f'model_best.pt')) 
+    

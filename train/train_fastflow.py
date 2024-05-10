@@ -112,7 +112,7 @@ def test(model, dataloader) -> dict:
 def fit(
     model, trainloader, testloader, optimizer, scheduler, accelerator,
     epochs: int, use_wandb: bool, log_interval: int, seed: int = None, savedir: str = None
-    ):
+    ,cfg=None):
 
     best_score = 0.0
     epoch_time_m = AverageMeter()

@@ -84,14 +84,14 @@ def parser(jupyter:bool = False, default_setting:str = None, model_setting:str =
         cfg.DEFAULT.exp_name = f"{cfg.DEFAULT.exp_name}-anomaly_ratio_{cfg.DATASET.params.anomaly_ratio}" 
                
     # load dataset statistics
-    if cfg.DATASET.dataset_name in ['MVTecAD','MVTecLoco','VISA']:
+    if cfg.DATASET.dataset_name in ['MVTecAD','MVTecLoco','VISA','BTAD','MPDD']:
         cfg.DATASET.update(stats.datasets['ImageNet'])
     else:    
         cfg.DATASET.update(stats.datasets[cfg.DATASET.dataset_name])    
     
     # update config for each method 
     
-    if cfg.MODEL.method in ['PatchCore','ReconPatch','ProxyCoreBase','SoftPatch']:
+    if cfg.MODEL.method in ['PatchCore','ReconPatch','ProxyCoreBase','SoftPatch','CoreInit']:
         cfg = patchcore_arguments(cfg)
     else:
         pass

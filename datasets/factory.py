@@ -8,6 +8,8 @@ from .mvtecad_loco import MVTecLoco
 from .visa import VISA
 from .cifar10 import CIFAR10 
 from .stats import datasets
+from .btad import BTAD 
+from .mpdd import MPDD 
 
 def create_dataset(dataset_name:str, datadir:str, class_name:str,
                    img_size:int , mean:list , std:list, aug_info:bool = None,
@@ -23,6 +25,60 @@ def create_dataset(dataset_name:str, datadir:str, class_name:str,
                                                     **params
                                                 )
         
+    return trainset, testset 
+
+def load_MPDD(dataset_name:str, datadir:str, class_name:str, img_size:int, mean:list, std:list, aug_info = None, baseline: bool = False, anomaly_ratio: float = 0.0):
+    df = get_mpdd_df(
+            datadir       = datadir,
+            dataset_name  = dataset_name,
+            class_name    = class_name,
+            baseline      = baseline,
+            anomaly_ratio = anomaly_ratio
+        )
+
+    trainset = MPDD(
+                df           = df,
+                train_mode   = 'train',
+                transform    = train_augmentation(img_size = img_size, mean = mean, std = std, aug_info = aug_info),
+                gt_transform = gt_augmentation(img_size = img_size, aug_info = aug_info),
+                gt           = True 
+            )
+
+    testset = MPDD(
+                df           = df,
+                train_mode   = 'test',
+                transform    = test_augmentation(img_size = img_size, mean = mean, std = std, aug_info = aug_info),
+                gt_transform = gt_augmentation(img_size = img_size, aug_info = aug_info),
+                gt           = True 
+            )
+    
+    return trainset, testset 
+
+def load_BTAD(dataset_name:str, datadir:str, class_name:str, img_size:int, mean:list, std:list, aug_info = None, baseline: bool = False, anomaly_ratio: float = 0.0):
+    df = get_btad_df(
+            datadir       = datadir,
+            dataset_name  = dataset_name,
+            class_name    = class_name,
+            baseline      = baseline,
+            anomaly_ratio = anomaly_ratio
+        )
+
+    trainset = BTAD(
+                df           = df,
+                train_mode   = 'train',
+                transform    = train_augmentation(img_size = img_size, mean = mean, std = std, aug_info = aug_info),
+                gt_transform = gt_augmentation(img_size = img_size, aug_info = aug_info),
+                gt           = True 
+            )
+
+    testset = BTAD(
+                df           = df,
+                train_mode   = 'test',
+                transform    = test_augmentation(img_size = img_size, mean = mean, std = std, aug_info = aug_info),
+                gt_transform = gt_augmentation(img_size = img_size, aug_info = aug_info),
+                gt           = True 
+            )
+    
     return trainset, testset 
 
 def load_VISA(dataset_name:str, datadir:str, class_name:str, img_size:int, mean:list, std:list, aug_info = None, baseline: bool = False, anomaly_ratio: float = 0.0):
@@ -185,7 +241,6 @@ def get_df(dataset_name: str, datadir: str, class_name: str, baseline: bool = Tr
     # get img_dirs dataframe 
     img_dirs = get_img_dirs(dataset_name=dataset_name, datadir=datadir, class_name=class_name)
     img_dirs['train/test'] = img_dirs[0].apply(lambda x : x.split('/')[-3]) # allocate initial train/test label 
-    
     if baseline:
         df = img_dirs
     else:
@@ -238,4 +293,48 @@ def train_test_split(df, max_ratio = 0.2, anomaly_ratio=0.2):
     return final_df 
 
 
-        
+def get_btad_df(datadir: str, dataset_name: str, class_name: str, baseline: bool = True, anomaly_ratio: float = 0.0):
+    '''
+    args:
+        datadir : root of data 
+        class_name : the name of category 
+        baseline : dataset for reproduce performance of baseline if True or dataset for experiment of fully unsupervised 
+    Example:
+        df = get_btad_df(
+                ddataset_name = 'BTAD'
+                datadir       = './Data' , 
+                class_name    = 'toothbrush'
+            ) 
+    '''
+    # get img_dirs dataframe 
+    
+    img_dirs = pd.Series(sorted(glob(os.path.join(datadir,dataset_name,str(class_name),'*','*','*'))))
+    img_dirs = pd.DataFrame(img_dirs[img_dirs.apply(lambda x : x.split('/')[-3]) != 'ground_truth']).reset_index(drop=True)
+    img_dirs['train/test'] = img_dirs[0].apply(lambda x : x.split('/')[-3]) # allocate initial train/test label 
+    img_dirs['anomaly'] = img_dirs[0].apply(lambda x : 1 if x.split('/')[-2] != 'ok' else 0)
+    if baseline:
+        df = img_dirs
+    return df 
+
+def get_mpdd_df(datadir: str, dataset_name: str, class_name: str, baseline: bool = True, anomaly_ratio: float = 0.0):
+    '''
+    args:
+        datadir : root of data 
+        class_name : the name of category 
+        baseline : dataset for reproduce performance of baseline if True or dataset for experiment of fully unsupervised 
+    Example:
+        df = get_btad_df(
+                ddataset_name = 'BTAD'
+                datadir       = './Data' , 
+                class_name    = 'toothbrush'
+            ) 
+    '''
+    # get img_dirs dataframe 
+    
+    img_dirs = pd.Series(sorted(glob(os.path.join(datadir,dataset_name,str(class_name),'*','*','*'))))
+    img_dirs = pd.DataFrame(img_dirs[img_dirs.apply(lambda x : x.split('/')[-3]) != 'ground_truth']).reset_index(drop=True)
+    img_dirs['train/test'] = img_dirs[0].apply(lambda x : x.split('/')[-3]) # allocate initial train/test label 
+    img_dirs['anomaly'] = img_dirs[0].apply(lambda x : 1 if x.split('/')[-2] != 'good' else 0)
+    if baseline:
+        df = img_dirs
+    return df 

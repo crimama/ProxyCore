@@ -1,5 +1,5 @@
 MODEL:
-  method: ProxyCoreBase
+  method: CoreInit
   backbone: wide_resnet50_2
   params:
     input_shape:
@@ -14,23 +14,32 @@ MODEL:
     n_input_feat: 1024
     n_hidden_feat: 4096
     n_projection_feat: 1024
+    temperature: 0.05
+    loss_fn: focalloss #CrossEntropy focalloss
+
 
 
 OPTIMIZER:
   opt_name: AdamP
   lr: 1e-5
   params:
-    weight_decay: 1e-2    
+    weight_decay: 1e-2
+
+# SCHEDULER: 
+#   name: CosineAnnealingLR
+#   params: 
+#     T_max: 100
+#     eta_min: 1e-4
 
 SCHEDULER: 
   name: null
   params: null
-
+    
 DATASET:
+  embed_augemtation: True
+  pseudo_label: normalize_coreset      # coreset normalize_coreset
   aug_info: 
     - PatchCore
-  params:
-    baseline: false
 
 TRAIN:
   epochs: 200

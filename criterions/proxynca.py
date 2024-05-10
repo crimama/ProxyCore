@@ -1,4 +1,5 @@
 import math
+import numpy as np     
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -115,7 +116,6 @@ class SoftTriple(nn.Module):
             for j in range(0, K):
                 self.weight[i*K+j, i*K+j+1:(i+1)*K] = 1
         init.kaiming_uniform_(self.fc, a=math.sqrt(5))
-        return
 
     def forward(self, input, target):
         centers = F.normalize(self.fc, p=2, dim=0)
@@ -158,11 +158,59 @@ class NormSoftmaxLoss(nn.Module):
 
         prediction_logits = nn.functional.linear(embeddings, norm_weight)
         
-        if mean:
-            loss = self.loss_fn(prediction_logits / self.temperature, instance_targets)        
+        loss = nn.CrossEntropyLoss(reduction = 'mean' if mean == True else 'none')(prediction_logits / self.temperature, instance_targets)
+        return loss 
+
+
+class CoreProxy(nn.Module):
+    def __init__(self,
+                 init_core :np.ndarray,
+                 temperature=0.05,
+                 loss_fn = 'CrossEntropy'):
+        '''
+        default tempearture : 0.05
+        '''
+        super(CoreProxy, self).__init__()
+
+        self.weight = nn.Parameter(torch.Tensor(init_core))
+        stdv = 1. / math.sqrt(self.weight.size(1))
+        self.weight.data.uniform_(-stdv, stdv)
+
+        self.temperature = temperature
+        self.loss_fn = loss_fn
+
+    def forward(self, embeddings, instance_targets, mean:bool=True) -> torch.Tensor:
+        norm_weight = nn.functional.normalize(self.weight, dim=1)
+
+        prediction_logits = nn.functional.linear(embeddings, norm_weight)
+        
+        if self.loss_fn == 'CrossEntropy':
+            loss = nn.CrossEntropyLoss(reduction = 'mean' if mean == True else 'none')(prediction_logits / self.temperature, instance_targets)
+        elif self.loss_fn == 'focalloss':
+            loss = FocalLoss(reduce = mean)(prediction_logits / self.temperature, instance_targets)
         else:
-            loss = nn.CrossEntropyLoss(reduction='none')(prediction_logits / self.temperature, instance_targets)
-        return loss
+            raise NotImplementedError
+        return loss 
     
     
     
+import torch.nn as nn 
+class FocalLoss(nn.Module):
+    def __init__(self, alpha=1, gamma=2, logits=False, reduce=True):
+        super(FocalLoss, self).__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+        self.logits = logits
+        self.reduce = reduce
+
+    def forward(self, inputs, targets):
+    
+        BCE_loss = nn.CrossEntropyLoss(reduction = 'mean' if self.reduce ==True else 'none')(inputs, targets)
+
+        pt = torch.exp(-BCE_loss)
+        F_loss = self.alpha * (1-pt)**self.gamma * BCE_loss
+
+        if self.reduce:
+            return torch.mean(F_loss)
+        else:
+            return F_loss

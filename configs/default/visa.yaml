@@ -15,7 +15,7 @@ DATASET:
   img_size: 224
   params:
     anomaly_ratio: 0.0
-    baseline: false
+    baseline: True
 
 OPTIMIZER:
   opt_name: Adam
@@ -26,10 +26,10 @@ OPTIMIZER:
     - 0.999
 
 TRAIN:
-  epochs: 1
+  epochs: 200
   grad_accum_steps: 1
-  mixed_precision: 'fp16'
-  log_interval: 1
+  mixed_precision: 'no'
+  log_interval: 10
   wandb:
     use: false
     project_name: ProxyCore

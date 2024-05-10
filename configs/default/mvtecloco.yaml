@@ -1,7 +1,7 @@
 DEFAULT:
   seed: 0
   savedir: ./results
-  exp_name: 'noisedad_nn5'
+  exp_name: ''
 
 DATASET:
   datadir: ../Data
@@ -14,8 +14,8 @@ DATASET:
   class_name: juice_bottle
   img_size: 224
   params:
-    anomaly_ratio: 0.2
-    baseline: false
+    anomaly_ratio: 0.0
+    baseline: True
 
 OPTIMIZER:
   opt_name: Adam

@@ -1,17 +1,17 @@
 DEFAULT:
   seed: 0
   savedir: ./results
-  exp_name: 'Baseline'
+  exp_name: ''
 
 DATASET:
   datadir: ../Data
   batch_size: 32
   test_batch_size: 32
   num_workers: 8
-  dataset_name: MVTecAD  # [AnomalyDataset,MVTecAD]
+  dataset_name: MPDD  # [AnomalyDataset,MVTecAD]
   aug_info: 
     - Resize
-  class_name: toothbrush
+  class_name: 'tubes'
   img_size: 224
   params:
     anomaly_ratio: 0.0

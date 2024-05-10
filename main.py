@@ -37,7 +37,7 @@ def run(cfg):
                             cfg.DEFAULT.savedir,
                             cfg.MODEL.method,
                             cfg.DATASET.dataset_name,
-                            cfg.DATASET.class_name,
+                            str(cfg.DATASET.class_name),
                             cfg.DEFAULT.exp_name,
                             f"seed_{cfg.DEFAULT.seed}"
                             )    
@@ -120,7 +120,8 @@ def run(cfg):
             use_wandb    = cfg.TRAIN.wandb.use,
             log_interval = cfg.TRAIN.log_interval,
             savedir      = savedir,
-            seed         = cfg.DEFAULT.seed 
+            seed         = cfg.DEFAULT.seed,
+            cfg          = cfg
         )     
     
 

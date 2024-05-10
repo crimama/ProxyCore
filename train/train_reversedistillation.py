@@ -16,7 +16,7 @@ _logger = logging.getLogger('train')
     
 
 
-def train(model, dataloader, optimizer, accelerator, log_interval: int) -> dict:
+def train(model, dataloader, optimizer, accelerator, log_interval: int, cfg: dict) -> dict:
     _logger.info('Train Start')
    
     batch_time_m = AverageMeter()
@@ -114,7 +114,7 @@ def test(model, dataloader) -> dict:
 def fit(
     model, trainloader, testloader, optimizer, scheduler, accelerator,
     epochs: int, use_wandb: bool, log_interval: int, seed: int = None, savedir: str = None
-    ):
+    ,cfg=None):
 
     best_score = 0.0
     epoch_time_m = AverageMeter()
@@ -128,7 +128,8 @@ def fit(
             dataloader   = trainloader, 
             optimizer    = optimizer, 
             accelerator  = accelerator, 
-            log_interval = log_interval
+            log_interval = log_interval,
+            cfg           = cfg 
         )                
         
         if scheduler is not None:

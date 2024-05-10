@@ -1,1 +1,1 @@
-from .proxynca import NormSoftmaxLoss, ProxyNCA, ProxyAnchor, SoftTriple
+from .proxynca import NormSoftmaxLoss, ProxyNCA, ProxyAnchor, SoftTriple, CoreProxy

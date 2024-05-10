@@ -16,3 +16,16 @@ def img_cvt(img):
 def normalizing(input):
     output = (input - np.min(input)) / (np.max(input) - np.min(input))
     return output 
+
+def scattering(data, **option):
+    if option:        
+        plt.scatter(
+            data[:, 0],
+            data[:, 1],
+            **option
+        )
+    else:
+        plt.scatter(
+            data[:, 0],
+            data[:, 1]        
+        )
