@@ -91,6 +91,8 @@ def run(cfg):
                 )
     
     # optimizer 
+    # if cfg.OPTIMIZER.name is not None:
+    # optimizer = __import__('torch.optim',fromlist='optim').__dict__[cfg.OPTIMIZER.opt_name]()    
     optimizer = AdamP(model.parameters(), lr=cfg.OPTIMIZER.lr, **cfg.OPTIMIZER.params)
     
     # scheduler 

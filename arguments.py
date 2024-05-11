@@ -91,7 +91,7 @@ def parser(jupyter:bool = False, default_setting:str = None, model_setting:str =
     
     # update config for each method 
     
-    if cfg.MODEL.method in ['PatchCore','ReconPatch','ProxyCoreBase','SoftPatch','CoreInit']:
+    if cfg.MODEL.method in ['PatchCore','ReconPatch','ProxyCoreBase','SoftPatch','CoreInit','SPADE']:
         cfg = patchcore_arguments(cfg)
     else:
         pass
