@@ -1,0 +1,1 @@
+{"epoch": 1, "lr": 0.005, "test_metrics": {"img_level": {"auroc": 0.95, "average_precision": 0.9191084850854009}, "pix_level": {"auroc": 0.9924799424794558, "average_precision": 0.2764303102316436}}, "epoch time": 187.023}

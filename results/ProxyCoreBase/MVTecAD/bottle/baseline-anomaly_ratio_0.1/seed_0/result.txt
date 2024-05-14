@@ -1,0 +1,6 @@
+{"epoch": 0, "lr": 1e-05, "train_loss": 2.5419, "test_metrics": {"img_level": {"auroc": 1.0, "average_precision": 1.0}, "pix_level": {"auroc": 0.9899728881037361, "average_precision": 0.85935782396337}}, "epoch time": 14.5365}
+{"epoch": 49, "lr": 1e-05, "train_loss": 0.0203, "test_metrics": {"img_level": {"auroc": 1.0, "average_precision": 1.0}, "pix_level": {"auroc": 0.989581333175657, "average_precision": 0.8546565977075699}}, "epoch time": 7.4974}
+{"epoch": 98, "lr": 1e-05, "train_loss": 0.0227, "test_metrics": {"img_level": {"auroc": 1.0, "average_precision": 1.0}, "pix_level": {"auroc": 0.9896369644738363, "average_precision": 0.8503292269289431}}, "epoch time": 7.7974}
+{"epoch": 147, "lr": 1e-05, "train_loss": 0.0066, "test_metrics": {"img_level": {"auroc": 1.0, "average_precision": 1.0}, "pix_level": {"auroc": 0.9893912951824927, "average_precision": 0.8446524233286127}}, "epoch time": 7.5463}
+{"epoch": 196, "lr": 1e-05, "train_loss": 0.0075, "test_metrics": {"img_level": {"auroc": 1.0, "average_precision": 1.0}, "pix_level": {"auroc": 0.9895924040316865, "average_precision": 0.8479073056964349}}, "epoch time": 7.9073}
+{"epoch": 199, "lr": 1e-05, "train_loss": 0.0266, "test_metrics": {"img_level": {"auroc": 1.0, "average_precision": 1.0}, "pix_level": {"auroc": 0.9893155631503029, "average_precision": 0.8442433796223716}}, "epoch time": 7.807}

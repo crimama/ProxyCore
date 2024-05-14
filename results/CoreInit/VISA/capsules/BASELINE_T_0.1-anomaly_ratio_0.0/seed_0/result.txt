@@ -1,0 +1,2 @@
+{"epoch": 0, "lr": 1e-05, "train_loss": 10.2653, "test_metrics": {"img_level": {"auroc": 0.7728333333333334, "average_precision": 0.8719685352996677}, "pix_level": {"auroc": 0.988581392706582, "average_precision": 0.7200183515588477}}, "epoch time": 204.3933}
+{"epoch": 24, "lr": 1e-05, "train_loss": 6.8815, "test_metrics": {"img_level": {"auroc": 0.763, "average_precision": 0.8608939654266184}, "pix_level": {"auroc": 0.9810124567184569, "average_precision": 0.685399428563471}}, "epoch time": 48.4877}
