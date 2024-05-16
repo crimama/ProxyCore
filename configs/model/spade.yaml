@@ -1,0 +1,9 @@
+MODEL:
+  method: SPADE
+  backbone: wide_resnet50_2
+  params:
+    k: 50
+
+DATASET:
+  aug_info: 
+    - PatchCore
