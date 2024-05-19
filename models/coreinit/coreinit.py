@@ -14,13 +14,16 @@ from criterions import CoreProxy, ProxyNCA
 
     
 class CoreInit(nn.Module):
-    def __init__(self, backbone, faiss_on_gpu, faiss_num_workers, 
+    '''
+    pslabel_sampling_ratio 는 fit에서 초기 pseudo label 생성을 위한 coreset을 위한 용도
+    당장 여기서 사용 되지는 않지만 config yaml파일에서 params.로 넣기 위해 임시로 넣어둠 
+    '''
+    def __init__(self, backbone, faiss_on_gpu, faiss_num_workers, pslabel_sampling_ratio,
                  sampling_ratio, device, input_shape, threshold='quant_0.15', weight_method='identity',
                  n_input_feat:int=1024, n_hidden_feat:int=4096, n_projection_feat:int=1024,
                  temperature=0.05, loss_fn='CrossEntropy'
                 ):
         super(CoreInit,self).__init__()
-        
         self.core = PatchCore(
             backbone          = backbone,
             faiss_on_gpu      = faiss_on_gpu,
