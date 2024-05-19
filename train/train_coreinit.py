@@ -163,7 +163,10 @@ def fit(
     for feat, target in featureloader:
         features.append(feat.detach().cpu().numpy())            
     features = np.vstack(features)
+    
+    model.core.featuresampler.percentage = cfg.MODEL.params.pslabel_sampling_ratio
     proxy, _ = model.core.featuresampler.run(features)
+    model.core.featuresampler.percentage = cfg.MODEL.params.sampling_ratio
     
     #! 가장 기본 distance matrix 계산 방법 
     _logger.info('Start Claculate Distance Matrix')        
