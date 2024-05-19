@@ -1,20 +1,20 @@
 
 # MVTecAD 'capsule cable bottle carpet grid leather metal_nut pill screw tile toothbrush wood zipper'
 # MVTecAD 'capsule hazelnut transistor cable bottle carpet grid leather metal_nut pill screw tile toothbrush wood zipper'
-# VISA  'candle  capsules  cashew  chewinggum  fryum  macaroni1  macaroni2  pcb1  pcb2  pcb3  pcb4  pipe_fryum'
+# VISA  'candle capsules cashew chewinggum fryum macaroni1 macaroni2 pcb1 pcb2 pcb3 pcb4 pipe_fryum'
 # MVTecLoco 'breakfast_box  juice_bottle  pushpins  screw_bag  splicing_connectors'
 # MPDD 'tubes metal_plate connector bracket_white bracket_brown bracket_black'
 gpu_id=$1
-method_setting='fastflow rd'
+method_setting='reconpatch'
 
 if [ $gpu_id == '0' ]; then #visa 
-  class_name='tubes metal_plate connector bracket_white bracket_brown bracket_black'
-  default_setting=./configs/default/mpdd.yaml
+  class_name='capsule hazelnut transistor cable bottle carpet grid leather metal_nut pill screw tile toothbrush wood zipper'
+  default_setting=./configs/default/mvtecad.yaml
   anomaly_ratio='0.0'  
 
 elif [ $gpu_id == '1' ]; then #visa 
-  class_name='tubes metal_plate connector bracket_white bracket_brown bracket_black'
-  default_setting=./configs/default/mpdd.yaml
+  class_name='candle capsules cashew chewinggum fryum macaroni1 macaroni2 pcb1 pcb2 pcb3 pcb4 pipe_fryum'
+  default_setting=./configs/default/visa.yaml
   anomaly_ratio='0.0'  
 
 elif [ $gpu_id == '2' ]; then #MVTECAD 

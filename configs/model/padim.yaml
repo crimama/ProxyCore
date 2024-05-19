@@ -1,0 +1,9 @@
+MODEL:
+  method: PaDiM
+  backbone: wide_resnet50_2
+  params:
+    d_reduced: 350
+
+DATASET:
+  aug_info: 
+    - PatchCore
