@@ -1,0 +1,50 @@
+DEFAULT:
+  seed: 0
+  savedir: ./results
+  exp_name: BASELINE-anomaly_ratio_0.0
+DATASET:
+  datadir: ../Data
+  batch_size: 32
+  test_batch_size: 32
+  num_workers: 8
+  dataset_name: VISA
+  aug_info:
+  - PatchCore
+  class_name: pcb2
+  img_size: 224
+  params:
+    anomaly_ratio: 0.0
+    baseline: true
+  mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  std:
+  - 0.229
+  - 0.224
+  - 0.225
+OPTIMIZER:
+  opt_name: Adam
+  lr: 0.005
+  params:
+    betas:
+    - 0.5
+    - 0.999
+TRAIN:
+  epochs: 200
+  grad_accum_steps: 1
+  mixed_precision: 'no'
+  log_interval: 10
+  wandb:
+    use: false
+    project_name: ProxyCore
+SCHEDULER:
+  name: null
+  params: null
+MODEL:
+  method: PaDiM
+  backbone: wide_resnet50_2
+  params:
+    d_reduced: 350
+default_setting: ./configs/default/visa.yaml
+model_setting: ./configs/model/padim.yaml

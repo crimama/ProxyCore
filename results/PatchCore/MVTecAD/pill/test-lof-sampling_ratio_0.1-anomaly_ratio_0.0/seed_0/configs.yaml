@@ -1,0 +1,62 @@
+DEFAULT:
+  seed: 0
+  savedir: ./results
+  exp_name: test-lof-sampling_ratio_0.1-anomaly_ratio_0.0
+DATASET:
+  datadir: ../Data
+  batch_size: 32
+  test_batch_size: 32
+  num_workers: 8
+  dataset_name: MVTecAD
+  aug_info:
+  - PatchCore
+  class_name: pill
+  img_size: 224
+  params:
+    anomaly_ratio: 0.0
+    baseline: false
+  mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  std:
+  - 0.229
+  - 0.224
+  - 0.225
+OPTIMIZER:
+  opt_name: Adam
+  lr: 0.005
+  params:
+    betas:
+    - 0.5
+    - 0.999
+TRAIN:
+  epochs: 1
+  grad_accum_steps: 1
+  mixed_precision: 'no'
+  log_interval: 10
+  wandb:
+    use: false
+    project_name: ProxyCore
+SCHEDULER:
+  name: null
+  params: null
+REFINEMENT:
+  nb_round: 1
+  n_query: 0
+MODEL:
+  method: PatchCore
+  backbone: wide_resnet50_2
+  params:
+    input_shape:
+    - 3
+    - 224
+    - 224
+    faiss_on_gpu: true
+    faiss_num_workers: 4
+    weight_method: lof
+    threshold: quant15
+    sampling_ratio: 0.1
+    device: cuda:0
+default_setting: ./configs/default/mvtecad.yaml
+model_setting: ./configs/model/patchcore.yaml
