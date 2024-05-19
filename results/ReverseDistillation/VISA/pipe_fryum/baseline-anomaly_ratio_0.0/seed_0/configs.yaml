@@ -1,0 +1,57 @@
+DEFAULT:
+  seed: 0
+  savedir: ./results
+  exp_name: baseline-anomaly_ratio_0.0
+DATASET:
+  datadir: ../Data
+  batch_size: 32
+  test_batch_size: 32
+  num_workers: 8
+  dataset_name: VISA
+  aug_info:
+  - Resize
+  class_name: pipe_fryum
+  img_size: 224
+  params:
+    anomaly_ratio: 0.0
+    baseline: false
+  mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  std:
+  - 0.229
+  - 0.224
+  - 0.225
+OPTIMIZER:
+  opt_name: Adam
+  lr: 0.005
+  params:
+    betas:
+    - 0.5
+    - 0.999
+TRAIN:
+  epochs: 200
+  grad_accum_steps: 1
+  mixed_precision: fp16
+  log_interval: 1
+  wandb:
+    use: false
+    project_name: ProxyCore
+SCHEDULER:
+  name: null
+  params: null
+MODEL:
+  method: ReverseDistillation
+  backbone: wide_resnet50_2
+  params:
+    input_size:
+    - 224
+    - 224
+    layers:
+    - layer1
+    - layer2
+    - layer3
+    anomaly_map_mode: add
+default_setting: ./configs/default/visa.yaml
+model_setting: ./configs/model/rd.yaml
