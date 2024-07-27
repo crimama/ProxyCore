@@ -56,11 +56,11 @@ class CoreInit(nn.Module):
     #         *init_core.shape
     #     )
         
-    def criterion(self, outputs:list):
+    def criterion(self, outputs:list,reduction='mean'):
         '''
             outputs = [z,w]
         '''
-        return self._criterion(*outputs)
+        return self._criterion(*outputs,reduction=reduction)
     
     def get_patch_embed(self, trainloader):
         self.core.forward_modules.eval()
