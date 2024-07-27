@@ -57,6 +57,7 @@ MODEL:
     weight_method: identity
     threshold: 1
     sampling_ratio: 0.1
+    pslabel_sampling_ratio: 0.25
     n_input_feat: 1024
     n_hidden_feat: 4096
     n_projection_feat: 1024
