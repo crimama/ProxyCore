@@ -179,17 +179,36 @@ class CoreProxy(nn.Module):
         self.temperature = temperature
         self.loss_fn = loss_fn
 
-    def forward(self, embeddings, instance_targets, mean:bool=True) -> torch.Tensor:
+    def forward(self, embeddings, instance_targets, reduction:bool=True) -> torch.Tensor:
         norm_weight = nn.functional.normalize(self.weight, dim=1)
 
         prediction_logits = nn.functional.linear(embeddings, norm_weight)
         
         if self.loss_fn == 'CrossEntropy':
-            loss = nn.CrossEntropyLoss(reduction = 'mean' if mean == True else 'none')(prediction_logits / self.temperature, instance_targets)
+            loss = nn.CrossEntropyLoss(reduction = 'mean' if reduction == True else 'none')(prediction_logits / self.temperature, instance_targets)
         elif self.loss_fn == 'focalloss':
-            loss = FocalLoss(reduce = mean)(prediction_logits / self.temperature, instance_targets)
+            loss = FocalLoss(reduce = reduction)(prediction_logits / self.temperature, instance_targets)
         else:
             raise NotImplementedError
+        
+        
+        # loss = FocalLoss(reduce = False)(prediction_logits / self.temperature, instance_targets)
+        
+        # ### noise score ### 
+        # from scipy.special import lambertw
+        # from skimage.filters import threshold_otsu
+        
+        # lam = 0.5 
+        # tau = threshold_otsu(loss.detach().cpu().numpy())   
+
+        # inner_term = (loss.detach().cpu()-tau) / (2 * lam)
+        # inner_term_pos = torch.relu(inner_term)
+        # w_value = lambertw(inner_term_pos)
+        # sigma = torch.exp(-w_value)
+        # sigma = sigma.real.type(torch.float32)
+        
+        # loss = torch.mean(sigma.to(loss.device) * loss )
+        
         return loss 
     
     
