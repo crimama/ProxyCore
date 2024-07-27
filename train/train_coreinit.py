@@ -237,12 +237,13 @@ def fit(
                 savedir = savedir, use_wandb = use_wandb, epoch = epoch, step = step,
                 optimizer = optimizer, epoch_time_m = epoch_time_m,
                 train_metrics = train_metrics, test_metrics = test_metrics)
+            # torch.save(model.state_dict(), os.path.join(savedir, f'model_{epoch}.pt')) 
             
         # checkpoint - save best results and model weights    
         if best_score < test_metrics['img_level']['auroc']:
             best_score = test_metrics['img_level']['auroc']
             _logger.info(f" New best score : {best_score} | best epoch : {epoch}\n")
-            # torch.save(model.state_dict(), os.path.join(savedir, f'model_best.pt')) 
+            #torch.save(model.state_dict(), os.path.join(savedir, f'model_best.pt')) 
             
     test_metrics = test(
         model         = model, 
