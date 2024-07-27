@@ -1,4 +1,4 @@
-# ProxyCore : Noise-resistant Industrial Anomaly Detection with proxy based Metric Learning
+# ProxyCore: Advancing Industrial Anomaly Localization with Coreset based Proxy Metric Learning
 - Anomaly Detection Framework for Noisy unsupervised learning 
 - Now ongoing 
 
@@ -52,13 +52,3 @@ done
 
 
 ```
-
-
-
-## Baseline
-- [x] Patchcore
-- [x] SoftPatch
-- [x] ReverseDistillation
-- [x] STPM
-- [ ] Padim
-
